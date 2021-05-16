@@ -257,7 +257,7 @@ version = "3.3.9+7"
 
 [[FastKernelTransform]]
 deps = ["BenchmarkTools", "Combinatorics", "CoordinateTransformations", "CovarianceFunctions", "KroneckerProducts", "LazyArrays", "LazyInverse", "LazyLinearAlgebra", "LinearAlgebra", "LinearAlgebraExtensions", "Plots", "RegionTrees", "SparseArrays", "SpecialFunctions", "SpecialPolynomials", "SphericalHarmonics", "StaticArrays", "Statistics", "SymEngine", "TaylorSeries", "Test", "TimerOutputs", "WoodburyIdentity"]
-git-tree-sha1 = "58410a16b03097118079bf26b407c667f9b51c44"
+git-tree-sha1 = "b0fe35525eadf1f5e53a07148414612e1826e605"
 repo-rev = "master"
 repo-url = "git@github.com:jpryan1/FastKernelTransform.jl.git"
 uuid = "86853969-a3c8-403a-9bab-f795f7953321"

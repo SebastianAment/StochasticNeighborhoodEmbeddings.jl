@@ -11,8 +11,8 @@ train_x, train_y = MNIST.traindata()
 # u = 40 # from "VISUALIZING DATA USING T-SNE"
 u = 50 # from "Accelerating t-SNE using Tree-Based Algorithms"
 n = size(train_x, 3)
-k = 512
 if true
+    k = 512
     subsample = sample(1:n, k, replace = false)
 else
     subsample = 1:n
@@ -53,28 +53,28 @@ f["X"] = X
 f["labels"] = labels
 f["max_iter"] = max_iter
 f["lr"] = lr
-f["beta_1"] = max_iter
-f["beta_2"] = max_iter
-f["early_iter"] = max_iter
-f["early_lr"] = max_iter
-f["early_beta_1"] = max_iter
-f["early_beta_2"] = max_iter
+f["beta_1"] = beta_1
+f["beta_2"] = beta_2
+f["early_iter"] = early_iter
+f["early_lr"] = early_lr
+f["early_beta_1"] = early_beta_1
+f["early_beta_2"] = early_beta_2
 f["early_compression"] = early_compression
 f["early_exaggeration"] = early_exaggeration
 close(f)
 
-using Plots
-doplot = false
-if doplot
-    f = h5open("MNIST_TSNE.h5", "r")
-    labels = read(f["labels"])
-    Y = read(f["Y"])
-    close(f)
-
-    YC = [Y[:, ==(i).(labels)] for i in 1:10]
-    scatter()
-    for (i, yc) in enumerate(YC)
-        scatter!(yc[1, :], yc[2, :], label = "$(i-1)")
-    end
-    gui()
-end
+# using Plots
+# doplot = true
+# if doplot
+#     f = h5open("MNIST_TSNE.h5", "r")
+#     labels = read(f["labels"])
+#     Y = read(f["Y"])
+#     close(f)
+#
+#     YC = [Y[:, ==(i).(labels)] for i in 1:10]
+#     scatter()
+#     for (i, yc) in enumerate(YC)
+#         scatter!(yc[1, :], yc[2, :], label = "$(i-1)")
+#     end
+#     gui()
+# end
