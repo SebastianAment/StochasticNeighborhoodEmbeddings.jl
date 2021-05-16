@@ -28,20 +28,20 @@ function unnormalized_joint_neighbor!(K::AbstractMatrix, X::AbstractMatrix,
 end
 
 # lazy representation
-function unnormalized_joint_neighbor(X::AbstractMatrix, kernel = cauchy, distance = euclidean)
+function unnormalized_joint_neighbor(X::AbstractMatrix, kernel = cauchy, distance = euclidean, dofast::Bool = false)
     d, n = size(X)
-    # k(x, y) = kernel(distance(x, y))
-    # k = Cauchy()
-    k(x, y) = cauchy(distance(x, y))
-    k²(x, y) = k(x, y)^2
+    k = Cauchy()
+    k² = k^2
     Q = gramian(k, X)
     Q² = gramian(k², X) # squared kernel
     D = -1I(n) # to subtract diagonal
-    if n > fast_algorithm_min_size # factorize with fast kernel transform, if data is large enough to warrant it
+    if dofast # factorize with fast kernel transform, if data is large enough to warrant it
         # IDEA: reuse tree replace kernel function: k, k^2
-        Q = fkt(Q; max_dofs_per_leaf = 256, precond_param = 2*256, trunc_param = 5) # fast kernel transform
+        max_dofs = 128
+        trunc_param = 4
+        Q = fkt(Q; max_dofs_per_leaf = max_dofs, precond_param = 0, trunc_param = trunc_param) # fast kernel transform
         Q = LazyMatrixSum(Q, D)
-        Q² = fkt(Q²; max_dofs_per_leaf = 256, precond_param = 2*256, trunc_param = 5)
+        Q² = fkt(Q²; max_dofs_per_leaf = max_dofs, precond_param = 0, trunc_param = trunc_param)
         Q² = LazyMatrixSum(Q², D)
     else # dense
         Q = Matrix(Q) + D

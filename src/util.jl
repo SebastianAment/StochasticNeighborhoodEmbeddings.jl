@@ -19,8 +19,8 @@ end
 function kl(P::SparseMatrixCSC, Q::AbstractMatOrFac, Z::Real = 1)
     I, J, _ = findnz(P)
     val = zero(promote_type(eltype(P), eltype(Q)))
-    for i in I, j in J
-            val += kl(P[i, j], Q[i, j] / Z)
+    for (i, j) in zip(I, J) # TODO: parallelize?
+        val += kl(P[i, j], Q[i, j] / Z)
     end
     return val
 end
@@ -35,6 +35,18 @@ euclidean(x::NTuple, y::NTuple) = _euclidean(x, y) # avoids temporary array
 # kernels
 gaussian(x::Real) = exp(-x^2/2)
 cauchy(x::Real) = inv(1+x^2)
+
+# linear algebra
+hadamard_product(P::AbstractMatrix, Q::AbstractMatOrFac) = P .* Q
+function hadamard_product(P::SparseMatrixCSC, Q::AbstractMatOrFac)
+    PQ = similar(P)
+    I, J, _ = findnz(P)
+     for (i, j) in zip(I, J)
+          PQ[i, j] = P[i, j] * Q[i, j]
+     end
+     return PQ
+end
+
 
 # synthetic data generators
 function two_bump_data(d::Int, n::Int)
