@@ -37,7 +37,15 @@ gaussian(x::Real) = exp(-x^2/2)
 cauchy(x::Real) = inv(1+x^2)
 
 # linear algebra
-hadamard_product(P::AbstractMatrix, Q::AbstractMatOrFac) = P .* Q
+function hadamard_product(P::AbstractMatrix, Q::AbstractMatOrFac)
+    n, m = size(P)
+    H = zeros(eltype(P), n, m)
+    for j in 1:n, i in 1:m
+        H[i, j] = P[i, j] * Q[i, j]
+    end
+    return H
+end
+
 function hadamard_product(P::SparseMatrixCSC, Q::AbstractMatOrFac)
     PQ = similar(P)
     I, J, _ = findnz(P)
@@ -83,10 +91,10 @@ end
 ############################### neighborhoods ##################################
 # defaults to euclidean distance
 function k_nearest_neighbors(X::AbstractMatrix, k::Int)
-    reorder = true # reorder copies the data and puts nearby points close in memory, think about using Distance.jl for the rest of the code too
-    leafsize = 8 # to optimize
     metric = Euclidean()
-    tree = BallTree(X, metric; leafsize = 8, reorder = true)
+    println(size(X))
+    println(k)
+    tree = BallTree(X, metric; leafsize = 32, reorder = true)
     neighbors, distances = knn(tree, X, k + 1) # plus one because we are putting in the original points as well
     for i in 1:size(X, 2) # delete self-references
          filter!(!=(i), neighbors[i])
