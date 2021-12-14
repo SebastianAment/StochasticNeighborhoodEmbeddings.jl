@@ -7,13 +7,12 @@ using FillArrays
 using ForwardDiff
 export tsne, tsne!
 
-using LazyLinearAlgebra
+# using LazyLinearAlgebra
 using CovarianceFunctions
-using CovarianceFunctions: gramian, Cauchy, Gramian
-using FastKernelTransform
+using CovarianceFunctions: Cauchy
 
-# IDEA: have repulsive_force, attractive_force for SNE
-fast_algorithm_min_size = 2^14 # minimum number of data points for fast algorithm
+# # IDEA: have repulsive_force, attractive_force for SNE
+# fast_algorithm_min_size = 2^14 # minimum number of data points for fast algorithm
 
 using NearestNeighbors
 

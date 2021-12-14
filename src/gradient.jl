@@ -19,7 +19,7 @@ end
 
 # generic fallback
 function attractive_force!(G::AbstractMatrix, P::AbstractMatOrFac, Q::AbstractMatOrFac, Y::AbstractMatrix)
-    PQ = hadamard_product(P, Q) # fast through sparsity in P,  check if special case is necessary
+    PQ = hadamard_product(P, Q) # fast through sparsity in P, check if special case is necessary
     PQY = PQ * Y'
     sumPQ = sum(PQ, dims = 2)
     @. G += 4(sumPQ' * Y - PQY')
@@ -40,6 +40,7 @@ function repulsive_force!(G::AbstractMatrix, P::AbstractMatOrFac, Q²::AbstractM
 end
 
 ################################## ADAM ########################################
+# implementation of adam optimizer
 # gradient first and second moment increment using
 function gradient!(G::AbstractMatrix, G²::AbstractMatrix,
                     P::AbstractMatOrFac, Q::AbstractMatOrFac, Q²::AbstractMatOrFac,

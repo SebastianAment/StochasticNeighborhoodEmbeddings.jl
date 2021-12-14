@@ -92,8 +92,6 @@ end
 # defaults to euclidean distance
 function k_nearest_neighbors(X::AbstractMatrix, k::Int)
     metric = Euclidean()
-    println(size(X))
-    println(k)
     tree = BallTree(X, metric; leafsize = 32, reorder = true)
     neighbors, distances = knn(tree, X, k + 1) # plus one because we are putting in the original points as well
     for i in 1:size(X, 2) # delete self-references
