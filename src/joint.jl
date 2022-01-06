@@ -14,14 +14,14 @@ end
 function normalization_constant(Q::AbstractMatOrFac)
     n, m = size(Q)
     x, y = ones(n), ones(m)
-    return dot(x, Q*y) # implicitly calls FKT through mul!
+    return dot(x, Q*y)
 end
 
 function unnormalized_joint_neighbor!(K::AbstractMatrix, X::AbstractMatrix,
                          kernel = cauchy, distance = euclidean)
     x = [c for c in eachcol(X)]
     xt = permutedims(x)
-    @. K = kernel(distance(x, xt)) # lazy?
+    @. K = kernel(distance(x, xt)) # IDEA: lazy: LazyMatrixSum(gramian(kernel, x), kernel(0)*I(length(x)))
     for i in diagind(K) # "Because we are only interested in modeling pairwise similarities, we set the value of pi|i to zero."
         K[i] = 0
     end
@@ -35,29 +35,7 @@ function unnormalized_joint_neighbor(X::AbstractMatrix, kernel = cauchy, distanc
     Q = gramian(k, X)
     Q² = gramian(k², X) # squared kernel
     D = -1I(n) # to subtract diagonal
-    if dofast # factorize with fast kernel transform, if data is large enough to warrant it
-        # IDEA: reuse tree replace kernel function: k, k^2
-        max_dofs = 128
-        trunc_param = 4
-        Q = fkt(Q; max_dofs_per_leaf = max_dofs, precond_param = 0, trunc_param = trunc_param) # fast kernel transform
-        Q = LazyMatrixSum(Q, D)
-        Q² = fkt(Q²; max_dofs_per_leaf = max_dofs, precond_param = 0, trunc_param = trunc_param)
-        Q² = LazyMatrixSum(Q², D)
-    else # dense
-        Q = Matrix(Q) + D
-        Q² = Matrix(Q²) + D
-    end
+    Q = Matrix(Q) + D # IDEA: Lazy
+    Q² = Matrix(Q²) + D
     return Q, Q²
 end
-
-# TODO: have function that changes the kernel function of a FMM, while maintaining
-# the same domain decomposition
-# function change_kernel(F::MultipoleFactorization, k)
-#     to = TimerOutput()
-#     G = MultipoleFactorization(k, F.trunc_param, to, multi_to_singnle)
-#
-#     if tgt_points === src_points && precond_param > 0
-#         @timeit fact.to "Get diag inv for precond" compute_preconditioner!(fact, precond_param, variance)
-#     end
-#     return G
-# end
