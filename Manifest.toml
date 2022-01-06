@@ -60,11 +60,9 @@ uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 
 [[deps.CovarianceFunctions]]
 deps = ["BlockFactorizations", "DiffResults", "FillArrays", "ForwardDiff", "IterativeSolvers", "KroneckerProducts", "LazyArrays", "LinearAlgebra", "SparseArrays", "SpecialFunctions", "TaylorSeries", "Test", "ToeplitzMatrices", "WoodburyFactorizations"]
-git-tree-sha1 = "48951dfdb8f11de90c75ee7d24005b293c0d1ed0"
-repo-rev = "main"
-repo-url = "../CovarianceFunctions.jl"
+git-tree-sha1 = "4c483164c7c204624965ba4a8817f12e0b808f9d"
 uuid = "b3329135-7958-41d4-bb02-e084c5a526bf"
-version = "0.2.0"
+version = "0.1.0"
 
 [[deps.DataAPI]]
 git-tree-sha1 = "cc70b17275652eb47bc9e5f81635981f13cea5c8"
