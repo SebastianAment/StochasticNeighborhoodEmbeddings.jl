@@ -47,7 +47,7 @@ function hadamard_product(P::AbstractMatrix, Q::AbstractMatOrFac)
 end
 
 function hadamard_product(P::SparseMatrixCSC, Q::AbstractMatOrFac)
-    PQ = similar(P)
+    PQ = similar(P) # this copies the sparsity pattern of P, therefore Q is nevery instantiated densely
     I, J, _ = findnz(P)
      for (i, j) in zip(I, J)
           PQ[i, j] = P[i, j] * Q[i, j]
