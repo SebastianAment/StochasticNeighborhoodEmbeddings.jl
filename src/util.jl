@@ -19,7 +19,7 @@ end
 function kl(P::SparseMatrixCSC, Q::AbstractMatOrFac, Z::Real = 1)
     I, J, _ = findnz(P)
     val = zero(promote_type(eltype(P), eltype(Q)))
-    for (i, j) in zip(I, J) # TODO: parallelize?
+    for (i, j) in zip(I, J) # IDEA: parallelize, simd?
         val += kl(P[i, j], Q[i, j] / Z)
     end
     return val

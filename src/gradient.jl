@@ -33,8 +33,8 @@ function repulsive_force!(G::AbstractMatrix, P::AbstractMatOrFac, Q²::AbstractM
     # 2. for each dimension, run fast transform once -> d * n * log(n) complexity
     Y1 = hcat(Y', ones(m)) # IDEA: lazy or re-allocate?
     Q²Y1 = Q²*Y1 # does all relevant computations in one matrix-matrix product
-    Q²Y = @view Q²Y1[:, 1:2]
-    sumQ² = @view Q²Y1[:, 3]
+    Q²Y = @view Q²Y1[:, 1:end-1]
+    sumQ² = @view Q²Y1[:, end]
     @. G += 4/Z * (Q²Y' - sumQ²' * Y) # can this be re-written as a single product?
     return G
 end
